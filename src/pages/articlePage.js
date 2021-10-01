@@ -1,6 +1,6 @@
 import React from 'react'
 
-const articlePage = () =>{
+const ArticlePage = () =>{
     // after requesting data from server, 
     return(
         <div className='pageWrapper'>
@@ -10,3 +10,5 @@ const articlePage = () =>{
         </div>
     )
 }
+
+export default ArticlePage

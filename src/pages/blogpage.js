@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Blogpage = () =>{
+const BlogPage = () =>{
     return(
         <div>
             Blogpage that won't be used yet.
@@ -8,4 +8,4 @@ const Blogpage = () =>{
     )
 }
 
-export default Blogpage
+export default BlogPage
