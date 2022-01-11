@@ -1,0 +1,14 @@
+.nav-wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo{
+    height: 5vh;
+}
+
+.nav-button{
+    padding: .3vw;
+    color: black;
+    background-color: aquamarine;
+}
