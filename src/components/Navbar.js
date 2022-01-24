@@ -1,5 +1,5 @@
 import React from 'react'
-import {Route, Switch, Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 
 import './Navbar.css'
 
@@ -18,6 +18,12 @@ const Navbar = () =>{
                 </Link>
                 <Link className='nav-button' to='/about'>
                     About
+                </Link>
+                <Link className='nav-button' to='/thrifting'>
+                    Thrifting
+                </Link>
+                <Link className='nav-button' to='/N'>
+                    SEED
                 </Link>
             </div>
         </div>    

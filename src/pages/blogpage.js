@@ -5,7 +5,7 @@ import db from '../firebase/firebase.utils'
 
 const Blogpage = () =>{
     const [blogData, setBlogData] = useState({})
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     useEffect(()=>{
         // db.collection('blog').onSnapshot((snapshot) =>{
@@ -30,6 +30,8 @@ const Blogpage = () =>{
         } catch(err){
             console.log(err)
         }
+
+        setLoading(!loading)
         // setBlogData()
     }, [])
     console.log(blogData)
@@ -43,7 +45,7 @@ const Blogpage = () =>{
     else return(
         <div>
             {Object.keys(blogData).map((title, key) => {
-                return <Link to ={`/blog/${key}`}>{title}</Link>
+                return <Link key={key} to ={`/blog/${key}`}>{title}</Link>
             })}
         </div>
     )
