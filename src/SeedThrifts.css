@@ -1,0 +1,7 @@
+.upload-preview{
+    height: 10vh;
+}
+
+input[type="file"] {
+    display: none;
+}
