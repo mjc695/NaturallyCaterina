@@ -7,6 +7,8 @@ import AboutPage from './pages/Aboutpage';
 import Blogpage from './pages/Blogpage'
 import ThriftingPage from './pages/Thrifting/ThriftingPage';
 import SeedThrifts from './SeedThrifts'
+import SignIn from './pages/Login/SignIn'
+import SignUp from './pages/Login/SignUp'
 
 function App() {
 
@@ -18,6 +20,8 @@ function App() {
         <Route path='/blog' component={Blogpage} />
         <Route path='/thrifting' component={ThriftingPage} />
         <Route path='/n' component={SeedThrifts} />
+        <Route path='/signIn' component={SignIn} />
+        <Route path='/signup' component={SignUp} />
         <Route exact path='/' component={Homepage} />
         <Redirect to='/' />
       </Switch>
