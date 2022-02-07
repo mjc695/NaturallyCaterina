@@ -25,7 +25,7 @@ export const userSignUp = async (email, password) =>{
         const userCredential = await createUserWithEmailAndPassword(auth, email, password)
         // add user credentials to redux
         console.log('signing UP')
-        return userSignUp
+        return userCredential
 
     } catch (error){
         console.log(error.code)
@@ -35,8 +35,9 @@ export const userSignUp = async (email, password) =>{
 
 export const userSignIn = async (email,password) =>{
     try{
+        console.log('signing In', email, password)
+        // console.log('password:', password)
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
-        console.log('signing In')
         return userCredential
     } catch(error){
         console.log(error.code)

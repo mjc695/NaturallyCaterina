@@ -9,6 +9,7 @@ import ThriftingPage from './pages/Thrifting/ThriftingPage';
 import SeedThrifts from './SeedThrifts'
 import SignIn from './pages/Login/SignIn'
 import SignUp from './pages/Login/SignUp'
+import UserPage from './pages/Login/UserPage';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Route path='/signIn' component={SignIn} />
         <Route path='/signup' component={SignUp} />
         <Route exact path='/' component={Homepage} />
+        <Route path='/user' component={UserPage} />
         <Redirect to='/' />
       </Switch>
     </div>
