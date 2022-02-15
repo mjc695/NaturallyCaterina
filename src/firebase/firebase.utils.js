@@ -4,7 +4,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
-import {getAuth,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth'
+import {getAuth,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, signInWithCustomToken,signInWithPopup, GoogleAuthProvider} from 'firebase/auth'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,7 +16,9 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore()
 const storage = getStorage(app)
 
-const auth = getAuth()
+export const auth = getAuth()
+
+const provider = new GoogleAuthProvider()
 
 // create account
 
@@ -33,11 +35,28 @@ export const userSignUp = async (email, password) =>{
     }
 }
 
+// subscribe to auth
+
+export const subscribeToAuth = async () =>{
+    try{
+        let user = null
+        await auth.onAuthStateChanged(response => {
+            console.log('response in utils', response)
+            user = response
+        })
+        return user
+    } catch(error){
+        console.log(error)
+    }
+}
+
+// sign in 
 export const userSignIn = async (email,password) =>{
     try{
         console.log('signing In', email, password)
         // console.log('password:', password)
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
+        console.log('user credentials in utils:', userCredential)
         return userCredential
     } catch(error){
         console.log(error.code)
@@ -45,9 +64,42 @@ export const userSignIn = async (email,password) =>{
     }
 }
 
+//sign in with persist token
+export const signInWithToken = async (token) =>{
+    try{
+        const userCredential = await signInWithCustomToken(auth,token)
+        return userCredential
+    } catch(err){
+        console.log(err.code)
+        console.log(err.message)
+    }
+
+}
+
+// sign in with google
+export const signInWithGoogle = async () =>{
+    try{
+        const result = await signInWithPopup(auth,provider)
+        const credential = GoogleAuthProvider.credentialFromResult(result)
+        const token = credential.accessToken
+        const user = result.user
+        console.log('result:', result)
+        console.log('credential:', credential)
+        console.log('token:', token)
+        console.log('user:', user)
+        return result
+    } catch(error){
+        console.log(error.code)
+        console.log(error.message)
+        console.log(error.email)
+        console.log(GoogleAuthProvider.credentialFromError(error))
+    }
+}
+
+
 export const userSignOut = async () =>{
     try{
-        return signOut(auth)
+        return auth.signOut()
     } catch(error){
         console.log("didn't sign out", error)
     }
