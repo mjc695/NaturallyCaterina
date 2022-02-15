@@ -7,6 +7,8 @@ import Logout from '../pages/Login/Logout'
 const Navbar = () =>{
 
     const loggedIn = useSelector((state)=>state.user.user.loggedIn)
+    const user = useSelector((state)=>state.user.user.userInfo)
+    // console.log(user)
 
     return(
         <div className='nav-wrapper'>
@@ -35,7 +37,8 @@ const Navbar = () =>{
                             <Link className='nav-button' to='/user' >UserPage</Link>
                             {/* <Link className='logout-button' to='/logout'>Logout</Link>  */}
                             {/* ADD LOGOUT TO BE PART OF A USER MENU IN DROPDOWN */}
-                            <Logout />
+                            <Logout /> 
+                            { /*LOGOUT COMPONENT */}
                         </div>
                         ): (
                             <div>
