@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
-import Cookies from 'universal-cookie'
 import {useSelector, useDispatch} from 'react-redux'
 import './App.css';
 import Homepage from './pages/Homepage';
@@ -22,14 +21,6 @@ function App() {
   // const [userToken,setUserToken] = useState('')
   // const [user,setUser] = useState({})
 
-  // useEffect(()=>{
-  //   const token = cookies.get('authToken')
-  //   const allCOokies = cookies.getAll()
-  //   console.log('userToken:', token)
-  //   console.log('all cookies:', allCOokies)
-  //   dispatch(fetchUserWithToken(token))
-
-  // },[])
   const dispatch = useDispatch()
 
   let unsubscribeFromAuth = null

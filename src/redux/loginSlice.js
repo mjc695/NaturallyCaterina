@@ -1,9 +1,7 @@
 import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit'
-import Cookies from 'universal-cookie'
 // import { setAccessToken } from 'firebase-tools/lib/api'
 import { userSignIn, userSignOut, signInWithToken, signInWithGoogle, auth, subscribeToAuth } from '../firebase/firebase.utils'
 
-const cookies = new Cookies()
 
 const initialUserInfo = { name: '', email : '', accessToken: '', photoURL: '', displayName:'', userId:''}
 
