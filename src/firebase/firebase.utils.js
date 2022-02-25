@@ -2,7 +2,7 @@
 // import firebase, { initializeApp } from "firebase/app";
 // import firebase from 'firebase/app'
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore'
+import { getDocs, doc, collection, getFirestore, getDoc } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import {getAuth,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut} from 'firebase/auth'
 // TODO: Add SDKs for Firebase products that you want to use
@@ -51,6 +51,27 @@ export const userSignOut = async () =>{
         console.log("didn't sign out", error)
     }
 }
+
+// fetching blogs
+export const fetchBlogs = async () => {
+    const docRef = collection(db,'blog')
+    const response = await getDocs(docRef)
+    let blogArr = []
+    response.forEach((doc) =>{
+        // console.log(`${doc.id} => ${JSON.stringify(doc.data())}`)
+       blogArr.push({
+           title: [doc.data().title],
+           text: doc.data().text
+        })
+    })
+    return blogArr
+}
+
+// export const fetchBlog = async (id) =>{
+//     const docRef = doc(db, 'blog', `${id}`)
+//     const response = await getDoc(docRef)
+//     console.log('doc in utils', response.exists())
+// }
 
 
 export default db

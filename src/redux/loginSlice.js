@@ -11,28 +11,28 @@ import { userSignIn } from '../firebase/firebase.utils'
      return response.user
  })
 
- const loginSlice = createSlice({
-     name : 'user',
-     initialState,
-     reducers:{
-         newAccount(state,action) {
-             const user = action.payload
-             state.user[userInfo]=user
-         }
-     }, 
-     extraReducers: builder => {
-         builder
-         .addCase(fetchUser.pending, (state,action) =>{
-             state.status = 'loading'
-         })
-         .addCase(fetchuser.fulfilled,(state,action) =>{
-            state.status='idle'
-            state.loggedIn=true
-            state.userInfo=action.payload
-         })
-     }
- })
+//  const loginSlice = createSlice({
+//      name : 'user',
+//      initialState,
+//      reducers:{
+//          newAccount(state,action) {
+//              const user = action.payload
+//              state.user[userInfo]=user
+//          }
+//      }, 
+//      extraReducers: builder => {
+//          builder
+//          .addCase(fetchUser.pending, (state,action) =>{
+//              state.status = 'loading'
+//          })
+//          .addCase(fetchuser.fulfilled,(state,action) =>{
+//             state.status='idle'
+//             state.loggedIn=true
+//             state.userInfo=action.payload
+//          })
+//      }
+//  })
 
- export const {newAccount} = createSlice.actions
+//  export const {newAccount} = createSlice.actions
 
- export default loginSlice.reducer
+//  export default loginSlice.reducer
