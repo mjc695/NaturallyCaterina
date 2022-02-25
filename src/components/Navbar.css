@@ -7,6 +7,11 @@
     height: 5vh;
 }
 
+.nav-buttons-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
 .nav-button{
     padding: .3vw;
     color: black;
