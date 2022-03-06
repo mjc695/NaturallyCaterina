@@ -2,7 +2,7 @@ import React, {useState, useEffect}from 'react'
 import {Redirect} from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSignIn } from '../../firebase/firebase.utils'
-import {fetchUser, fetchUserWithGoogleAuth} from '../../redux/loginSlice.js'
+import {fetchUser, fetchUserWithGoogleAuth, fetchAuthStatus} from '../../redux/loginSlice.js'
 import Spinner from './Spinner'
 
 const SignIn = () =>{
@@ -21,11 +21,13 @@ const SignIn = () =>{
         e.preventDefault()
         dispatch(fetchUser({email,password}))
         // loggedIn? history.push('/') : alert('There was an error logging in Please try again')
+        dispatch(fetchAuthStatus())
     }
-
+    
     const onGoogleSignIn = ()=>{
         console.log('signing in with google, passing on to redux')
         dispatch(fetchUserWithGoogleAuth())
+        dispatch(fetchAuthStatus())
     }
 
 

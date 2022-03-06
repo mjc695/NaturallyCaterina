@@ -2,9 +2,10 @@
 // import firebase, { initializeApp } from "firebase/app";
 // import firebase from 'firebase/app'
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore'
+import { doc, getDoc,setDoc, updateDoc, getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 import {getAuth,createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, signInWithCustomToken,signInWithPopup, GoogleAuthProvider} from 'firebase/auth'
+import { useRouteMatch } from "react-router";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -50,6 +51,52 @@ export const subscribeToAuth = async () =>{
     }
 }
 
+// grabbing user data 
+
+export const userDataSnapshot = async (user) =>{
+    const userid = user.uid
+    const docRef = doc(db, 'users', `${userid}`)
+    try{
+        // console.log('trying to get snapshot')
+        const userData = await getDoc(docRef)
+        console.log('userData', userData.exists())
+        if (userData.exists()) return userData.data()
+        console.log('user', user.email)
+
+        const email = user.email
+        const name = user.displayName || ''
+        const displayPhotoUrl = user.photoURL || ''
+        const newUserData = {
+            email,
+            name,
+            displayPhotoUrl,
+            createdAt: new Date()
+        }
+        console.log('email:', email, new Date())
+        const newUser = await setDoc(docRef,newUserData)
+        console.log('set new data', newUser)
+        return docRef
+
+    } catch(error){
+        console.log(error)
+    }
+}
+
+export const updateUserData = async (userData) =>{
+    const {userId, name, displayPhotoUrl} = userData
+    const docRef = doc(db, 'users', `${userId}`)
+    try{
+        console.log('typeof name', typeof name)
+        const newUser = await updateDoc(docRef,{
+            name: name,
+            displayPhotoUrl, displayPhotoUrl
+        })
+    }catch(error){
+        console.log(error)
+    }
+}
+
+
 // sign in 
 export const userSignIn = async (email,password) =>{
     try{
@@ -69,9 +116,9 @@ export const signInWithToken = async (token) =>{
     try{
         const userCredential = await signInWithCustomToken(auth,token)
         return userCredential
-    } catch(err){
-        console.log(err.code)
-        console.log(err.message)
+    } catch(error){
+        console.log(error.code)
+        console.log(error.message)
     }
 
 }
