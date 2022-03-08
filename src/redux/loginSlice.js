@@ -1,11 +1,9 @@
 import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit'
-import Cookies from 'universal-cookie'
 // import { setAccessToken } from 'firebase-tools/lib/api'
-import { userSignIn, userSignOut, signInWithToken, signInWithGoogle, auth, subscribeToAuth } from '../firebase/firebase.utils'
+import { userSignIn, userSignOut, signInWithToken, signInWithGoogle, auth, subscribeToAuth, userDataSnapshot, updateUserData } from '../firebase/firebase.utils'
 
-const cookies = new Cookies()
 
-const initialUserInfo = { name: '', email : '', accessToken: '', photoURL: '', displayName:'', userId:''}
+const initialUserInfo = { name: '', email : '', accessToken: '', displayPhotoUrl: '', displayName:'', userId:''}
 
  const initialState = {
      user:{
@@ -18,44 +16,61 @@ const initialUserInfo = { name: '', email : '', accessToken: '', photoURL: '', d
  export const fetchUser = createAsyncThunk('user/fetchUser', async({email,password})=>{
     //  console.log('in thunk', email, typeof  password)
      const response = await userSignIn(email,password)
-    //  console.log('type of response:', response.user)
+     //  console.log('type of response:', response.user)
      const user = response.user
      const newUser = {
          email: user.email,
-         accessToken: user.accessToken,
-         photoUrl: user.photoURL,
-         displayName : user.displayName,
+        //  accessToken: user.accessToken,
+         displayPhotoUrl: user.displayPhotoUrl,
+        //  displayName : user.displayName,
          userId: user.uid,
          name: user.name
         }
         // cookies.set('authToken', user.accessToken)
-     return newUser
- })
-
- export const fetchAuthStatus = createAsyncThunk('user/fetchAuthStatus', async()=>{
-     const user = await subscribeToAuth()
+        return newUser
+    })
+    
+    export const fetchAuthStatus = createAsyncThunk('user/fetchAuthStatus', async()=>{
+        const user = await subscribeToAuth()
+        const userData = await userDataSnapshot(user)
+        console.log('userData in slice:', userData)
     //  console.log('response in slice fetching auth', user)
     //  const user = response.user
      const newUser = {
         email: user.email,
-        accessToken: user.accessToken,
-        photoUrl: user.photoURL,
-        displayName : user.displayName,
+        // accessToken: user.accessToken,
+        displayPhotoUrl: userData.displayPhotoUrl,
+        // displayName : user.displayName,
         userId: user.uid,
-        name: user.name
+        name: userData.name
      }
     //  console.log('new user in fetching auth status:', newUser)
      return newUser
  })
+
+    export const updateUser = createAsyncThunk('user/updateUser', async(userData)=>{
+        await updateUserData(userData)
+        const newUserData = await userDataSnapshot({uid: userData.userId})
+        const newUser = {
+            email: newUserData.email,
+            accessToken: newUserData.accessToken,
+            displayPhotoUrl: newUserData.displayPhotoUrl,
+            displayName : newUserData.displayName,
+            userId: newUserData.uid,
+            name: userData.name
+         }
+         return newUser
+    })
+
 
  export const fetchUserWithToken = createAsyncThunk('user/fetchUserWithToken', async(token)=>{
      const response = await signInWithToken(token)
      const user = response.user
      const newUser = {
         email: user.email,
-        accessToken: user.accessToken,
-        photoUrl: user.photoURL,
-        displayName : user.displayName,
+        // accessToken: user.accessToken,
+        displayPhotoUrl: user.displayPhotoUrl,
+        // displayName : user.displayName,
         userId: user.uid,
         name: user.name
      }
@@ -79,7 +94,7 @@ const initialUserInfo = { name: '', email : '', accessToken: '', photoURL: '', d
         const newUser = {
             email: user.email,
             accessToken: user.accessToken,
-            photoUrl: user.photoURL,
+            displayPhotoUrl: user.displayPhotoUrl,
             displayName : user.displayName,
             userId: user.uid,
             name: user.name
@@ -105,7 +120,7 @@ const initialUserInfo = { name: '', email : '', accessToken: '', photoURL: '', d
              const newUser = {
                 email: user.email,
                 accessToken: user.accessToken,
-                photoUrl: user.photoURL,
+                displayPhotoUrl: user.displayPhotoUrl,
                 displayName : user.displayName,
                 userId: user.uid,
                 name: user.name
@@ -138,7 +153,21 @@ const initialUserInfo = { name: '', email : '', accessToken: '', photoURL: '', d
          })
          .addCase(fetchAuthStatus.rejected,(state,payload)=>{
              console.log('attempt rejected', state, payload)
+        })
+
+        // for updating user
+         .addCase(updateUser.pending, (state,action) =>{
+             state.user.status = 'loading'
          })
+         .addCase(updateUser.fulfilled,(state,action) =>{
+            state.user.status='idle'
+            state.user.loggedIn=true
+            state.user.userInfo=action.payload
+         })
+         .addCase(updateUser.rejected,(state,payload)=>{
+             console.log('attempt rejected', state, payload)
+         })
+
 
          // case for login w/ token
         //  .addCase(fetchUserWithToken.pending, (state,action)=>{
